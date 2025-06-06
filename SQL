@@ -1,0 +1,111 @@
+CREATE DATABASE PORTIFOLIO_UNIFECAF;
+USE PORTIFOLIO_UNIFECAF;
+
+CREATE TABLE aluno (
+    aluno_id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14),
+    email VARCHAR(100),
+    telefone VARCHAR(20),
+    endereco VARCHAR(255),
+    nascimento DATE,
+    genero ENUM('Masculino', 'Feminino', 'Outro')
+);
+
+-- Tabela professor
+CREATE TABLE professor (
+    professor_id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14),
+    email VARCHAR(100),
+    telefone VARCHAR(20),
+    titulacao VARCHAR(50),
+    area_formacao VARCHAR(100),
+    genero ENUM('Masculino', 'Feminino', 'Outro')
+);
+
+-- Tabela curso
+CREATE TABLE curso (
+    curso_id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    codigo VARCHAR(20),
+    duracao INT,
+    turno ENUM('Matutino', 'Vespertino', 'Noturno', 'Integral'),
+    modalidade ENUM('Presencial', 'EAD', 'Híbrido'),
+    status ENUM('Ativo', 'Inativo')
+);
+
+-- Tabela disciplina
+CREATE TABLE disciplina (
+    disciplina_id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    codigo VARCHAR(20),
+    carga_horaria INT,
+    curso_id INT,
+    FOREIGN KEY (curso_id) REFERENCES curso(curso_id)
+);
+
+-- Tabela turma
+CREATE TABLE turma (
+    turma_id INT PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR(20),
+    curso_id INT,
+    semestre VARCHAR(10),
+    ano INT,
+    turno ENUM('Matutino', 'Vespertino', 'Noturno', 'Integral'),
+    status ENUM('Ativa', 'Inativa'),
+    FOREIGN KEY (curso_id) REFERENCES curso(curso_id)
+);
+
+-- Tabela matricula
+CREATE TABLE matricula (
+    matricula_id INT PRIMARY KEY AUTO_INCREMENT,
+    aluno_id INT,
+    turma_id INT,
+    data_matricula DATE,
+    status ENUM('Ativa', 'Trancada', 'Cancelada'),
+    FOREIGN KEY (aluno_id) REFERENCES aluno(aluno_id),
+    FOREIGN KEY (turma_id) REFERENCES turma(turma_id)
+);
+
+-- Tabela nota
+CREATE TABLE nota (
+    nota_id INT PRIMARY KEY AUTO_INCREMENT,
+    matricula_id INT,
+    disciplina_id INT,
+    nota1 DECIMAL(5,2),
+    nota2 DECIMAL(5,2),
+    nota_final DECIMAL(5,2),
+    frequencia INT,
+    status ENUM('Aprovado', 'Reprovado', 'Em andamento'),
+    FOREIGN KEY (matricula_id) REFERENCES matricula(matricula_id),
+    FOREIGN KEY (disciplina_id) REFERENCES disciplina(disciplina_id)
+);
+
+
+
+INSERT INTO aluno (nome, cpf, email, telefone, endereco, nascimento, genero)
+VALUES (
+  'Arthur Mittelstadt',
+  '123.456.789-00',
+  'arthur@email.com',
+  '47999999999',
+  'Rua dos Estudantes, 100',
+  '2004-05-12',
+  'Masculino'
+);
+
+INSERT INTO curso (nome, codigo, duracao, turno, modalidade, status)
+VALUES (
+  'Análise e Desenvolvimento de Sistemas',
+  'ADS001',
+  4,
+  'Noturno',
+  'Presencial',
+  'Ativo'
+);
+
+SELECT * FROM  aluno;
+
+
+SELECT * FROM  curso;
